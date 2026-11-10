@@ -1,0 +1,33 @@
+# Datos comerciales: no versionar Excel ni archivos de resultados.
+*.xlsx
+*.xls
+*.xlsm
+*.xlsb
+*.csv
+*.zip
+!tests/fixtures/*.csv
+
+# Archivos, logs y estados locales.
+data/
+*.log
+*.db
+*.sqlite*
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+.env
+.env.*
+dist/
+build/
+*.spec
+.DS_Store
+Thumbs.db
+
+# Único .xlsx genérico, vacío, que forma parte del producto.
+!plantilla_precios_finales.xlsx

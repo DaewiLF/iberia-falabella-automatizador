@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iberia | Consolidador Falabella 2.2</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="logo">IF<span>.</span></div>
+    <div class="brand"><div class="eyebrow">IBERIA / HERRAMIENTA INTERNA</div><h1>Consolidador de plantillas</h1><p>Automatización segura para Falabella Seller Center</p></div>
+    <div class="offline"><span class="pulse"></span> 100 % local <small>v2.2</small></div>
+  </header>
+  <div class="workspace">
+    <main>
+      <section class="panel" aria-labelledby="archivos-title">
+        <div class="title-line"><span class="number">01</span><div><h2 id="archivos-title">Archivos de origen</h2><p>Importa los archivos que utilizas en tu trabajo. Se procesan exclusivamente en este computador.</p></div></div>
+        <form id="work-form" enctype="multipart/form-data">
+          <div class="uploads">
+            <label class="upload required"><span class="fileicon">XLSX</span><span><strong>Plantilla Falabella</strong><small>Con o sin productos. Mantendremos sus hojas y estilos.</small><b class="selected" data-for="falabella">Seleccionar archivo</b></span><input type="file" name="falabella" id="falabella" required accept=".xlsx" /></label>
+            <label class="upload required"><span class="fileicon">XLSX</span><span><strong>Responsables</strong><small>SKU padre/hijo, talla, dimensiones, peso y responsable.</small><b class="selected" data-for="responsables">Seleccionar archivo</b></span><input type="file" name="responsables" id="responsables" required accept=".xlsx" /></label>
+            <label class="upload"><span class="fileicon muted">XLSX</span><span><strong>URLs de fotografías <em>Opcional</em></strong><small>Relaciona fotos por SKU o componentes del pack.</small><b class="selected" data-for="fotos">Seleccionar archivo</b></span><input type="file" name="fotos" id="fotos" accept=".xlsx" /></label>
+            <label class="upload"><span class="fileicon muted">XLSX</span><span><strong>Precios de Falabella <em>Opcional</em></strong><small>Hoja con SKU ML y Precio Final Redondeo.</small><b class="selected" data-for="precios">Seleccionar archivo</b></span><input type="file" name="precios" id="precios" accept=".xlsx" /></label>
+            <label class="upload"><span class="fileicon muted">XLSX</span><span><strong>Precios finales calculados <em>Opcional</em></strong><small>Una hoja con columnas SKU y Precio Final (incluye packs).</small><b class="selected" data-for="precios_finales">Seleccionar archivo</b></span><input type="file" name="precios_finales" id="precios_finales" accept=".xlsx" /></label>
+          </div>
+          <hr>
+          <div class="title-line minor"><span class="number">02</span><div><h2>Qué productos y cómo combinarlos</h2><p>Los filtros son opcionales para una plantilla con SKU existentes.</p></div></div>
+          <div class="fields two">
+            <label>SKU padre(s) a procesar <textarea name="parents" rows="2" placeholder="PACK-A-B-C&#10;Otros SKU separados por línea, coma o punto y coma"></textarea><span>Con una plantilla vacía, indica el SKU padre para evitar llenar productos incorrectos.</span></label>
+            <label>Responsable <input name="owner" placeholder="Ej.: operador1" /><span>Filtro exacto por la columna de responsables.</span></label>
+            <label>Nombre comercial (si hay filas vacías) <input name="name" placeholder="Tripack de alpargatas" /></label>
+            <label>Marca (si hay filas vacías) <input name="brand" placeholder="IBERIA" /></label>
+            <label>Categoría Falabella (si hay filas vacías) <input name="category" placeholder="Copiar la categoría exacta del catálogo" /></label>
+            <label>Precio uniforme CLP (solo si corresponde) <input name="uniform_price" inputmode="decimal" placeholder="Ej.: 27790" /><span>Última prioridad. No calcula automáticamente precios de packs.</span></label>
+            <label>Formato de SKU padre en columna L <select name="parent_mode"><option value="responsables">SKU PADRE de Responsables (actual)</option><option value="smallest_child">SKU vendedor de la menor talla</option></select></label>
+            <label>Mapeo de dimensiones Falabella <select name="dimension_mode"><option value="legacy">Largo ← Alto / Alto ← Profundidad (actual)</option><option value="swapped">Largo ← Profundidad / Alto ← Alto</option></select><span>Verifica físicamente cuál corresponde al paquete embalado.</span></label>
+          </div>
+          <details class="advance"><summary>Reglas avanzadas para packs y precios</summary>
+            <div class="fields two advanced-grid">
+              <label>Composición explícita de packs <textarea name="pack_mapping" rows="5" placeholder="PACK-A-B-C = ARTICULO-A, ARTICULO-B, ARTICULO-C"></textarea><span>Un pack por línea. Si no hay configuración, se infieren componentes solo cuando la coincidencia es inequívoca.</span></label>
+              <label>Precios específicos por SKU o pack <textarea name="manual_prices" rows="5" placeholder="PACK-A-B-C;27790&#10;ARTICULO-A-34;8990"></textarea><span>Formato SKU;PRECIO. Tiene prioridad sobre los Excel cargados.</span></label>
+            </div>
+            <div class="config-row">
+              <label>Archivo de mapeo JSON personalizado <input type="file" name="config_file" accept=".json" /></label>
+              <button id="config-download" class="plain" type="button">Descargar configuración base</button>
+            </div>
+            <p class="help">Para otras disposiciones de columnas, modifica el JSON. La aplicación valida los encabezados y no altera la estructura del destino.</p>
+          </details>
+          <div class="checks">
+            <label><input type="checkbox" name="photos" checked> Actualizar fotos si se encuentra correspondencia fiable</label>
+            <label><input type="checkbox" name="prices" checked> Actualizar precios solo con valores válidos</label>
+            <label><input type="checkbox" name="descriptions"> Actualizar descripción desde Responsables</label>
+            <label><input type="checkbox" name="blank"> Permitir crear productos en filas vacías ya preformateadas</label>
+          </div>
+          <div class="actions"><button type="submit" id="preview-button" class="primary">Analizar y previsualizar <span>→</span></button><button type="button" id="save-preferences" class="secondary">Guardar preferencias</button><button type="button" id="reset-preferences" class="ghost">Restablecer</button></div>
+        </form>
+      </section>
+    </main>
+    <aside>
+      <section class="panel help-panel"><div class="eyebrow">PROTECCIÓN DEL EXCEL</div><h2>Conserva la plantilla. Corrige los datos.</h2>
+        <div class="feature"><span>01</span><div><strong>Mapa de SKU verificable</strong><p>Detecta duplicados, diferencias de padres y columnas incompatibles.</p></div></div>
+        <div class="feature"><span>02</span><div><strong>Enriquecimiento controlado</strong><p>Resuelve precios por SKU y fotografías de packs sin inventar información.</p></div></div>
+        <div class="feature"><span>03</span><div><strong>Previsualización y bloqueo</strong><p>Identifica filas listas, advertencias y errores antes de generar el archivo.</p></div></div>
+        <div class="feature"><span>04</span><div><strong>Excel original protegido</strong><p>Compara los componentes internos XLSX y conserva todos los archivos ajenos a la hoja procesada.</p></div></div>
+        <div class="callout"><strong>Importante</strong> Un EAN-13 matemáticamente válido no es un identificador GS1 autorizado. Esta versión nunca genera códigos comerciales aleatorios. La carga final en Seller Center debe probarse por separado.</div>
+      </section>
+      <section class="panel history-panel"><div class="panel-heading"><h3>Historial local</h3><button id="refresh-history" class="plain" type="button">Actualizar</button></div><div id="history-list" class="history"><p class="muted">No hay ejecuciones registradas.</p></div><small>El historial guarda fecha, hash parcial y resultados. No conserva Excel ni SKUs.</small></section>
+    </aside>
+  </div>
+  <section id="error-box" class="panel error-panel" hidden role="alert"><h2>No se pudo analizar</h2><p id="error-message"></p></section>
+  <section id="result" class="panel review" hidden aria-labelledby="result-title">
+    <div class="review-header"><div><span class="eyebrow">03 / CONTROL PREVIO</span><h2 id="result-title">Vista previa del procesamiento</h2><p id="result-desc"></p></div><div class="report-actions"><a id="report-download" href="#" class="secondary link">Reporte CSV</a><a id="audit-download" href="#" class="secondary link">Auditoría JSON</a></div></div>
+    <div class="stats" id="stats"><div><strong id="count-total">0</strong><span>Analizados</span></div><div class="stat-ready"><strong id="count-ready">0</strong><span>Listos</span></div><div class="stat-warn"><strong id="count-warn">0</strong><span>Con advertencia</span></div><div class="stat-error"><strong id="count-blocked">0</strong><span>Bloqueados</span></div><div><strong id="count-changes">0</strong><span>Celdas editadas</span></div></div>
+    <div class="status-banner" id="status-banner"></div>
+    <details class="advance" id="general-notes"><summary>Notas generales y validación del formato (<span id="note-count">0</span>)</summary><div id="global-notes"></div><p id="integrity-note"></p></details>
+    <div class="toolbar"><label>Mostrar <select id="status-filter"><option value="all">Todos los resultados</option><option value="ready">Solo listos</option><option value="warning">Con advertencias</option><option value="blocked">Bloqueados</option></select></label><label>Buscar SKU <input id="sku-search" placeholder="Buscar SKU o responsable" type="search" /></label></div>
+    <div class="scroll"><table><thead><tr><th>Fila</th><th>SKU vendedor</th><th>Talla</th><th>Precio</th><th>Fotos</th><th>Cambios</th><th>Estado</th><th>Detalle</th></tr></thead><tbody id="result-rows"></tbody></table></div>
+    <div class="approval"><label class="ack"><input id="ack" type="checkbox"> Revisé los resultados, entiendo las advertencias y verificaré el archivo antes de publicarlo.</label><div class="review-buttons"><button class="primary" id="download-final" type="button" disabled>Confirmar y descargar Excel</button><button class="secondary" id="download-draft" type="button" disabled>Descargar borrador NO PUBLICAR</button></div><p class="muted">Si hay errores bloqueantes, solo se puede descargar un borrador para corregirlo. Ningún archivo se envía a Falabella.</p></div>
+  </section>
+  <footer>Iberia · Automatización local v2.2 · La aceptación final de la carga la determina Falabella Seller Center.</footer>
+</div>
+</body></html>

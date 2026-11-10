@@ -1,0 +1,80 @@
+{
+  "version": 2,
+  "sources": {
+    "responsables": {
+      "sheet": "Hoja 1",
+      "header_row": 1,
+      "columns": {
+        "parent": "A",
+        "sku": "B",
+        "description": "C",
+        "source_height": "D",
+        "width": "E",
+        "depth": "F",
+        "weight": "G",
+        "size": "H",
+        "owner": "I",
+        "state": "J"
+      }
+    },
+    "fotos": {
+      "sheet": "Hoja 1",
+      "header_row": 1,
+      "columns": {
+        "sku": "B",
+        "state": "C",
+        "url1": "D",
+        "url2": "E",
+        "url3": "F",
+        "url4": "G",
+        "url5": "H",
+        "url6": "I"
+      }
+    },
+    "precios": {
+      "sheet": "Alpargatas Iberia 15",
+      "header_row": 2,
+      "columns": {
+        "sku": "B",
+        "price": "AB"
+      }
+    },
+    "precios_finales": {
+      "sheet": null,
+      "header_row": 1,
+      "columns": {
+        "sku": "A",
+        "price": "B"
+      }
+    }
+  },
+  "destination": {
+    "sheet": "Subir plantilla",
+    "header_row": 4,
+    "start_row": 5,
+    "max_row": 2000,
+    "columns": {
+      "name": "A",
+      "brand": "B",
+      "description": "D",
+      "category": "E",
+      "size": "I",
+      "sku": "J",
+      "barcode": "K",
+      "parent": "L",
+      "price": "N",
+      "width": "AK",
+      "length": "AL",
+      "height": "AM",
+      "weight": "AN",
+      "image1": "AQ",
+      "image2": "AR",
+      "image3": "AS",
+      "image4": "AT",
+      "image5": "AU",
+      "image6": "AV",
+      "image7": "AW",
+      "image8": "AX"
+    }
+  }
+}

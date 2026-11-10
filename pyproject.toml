@@ -1,0 +1,13 @@
+[project]
+name = "iberia-falabella-automatizador"
+version = "2.2.0"
+description = "Aplicación local para completar plantillas Falabella sobre OOXML original"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F63", "F7", "F82"]
